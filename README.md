@@ -7,8 +7,8 @@ We aim to analyze volatile financial markets based on Blockchain technology by c
 
 ## 👥 Team Members
 * **[Maren Handwerk]** - *maren-handwerk*
-* **[Name Kollege 1]** - *Github Username*
-* **[Name Kollege 2]** - *Github Username*
+* **[Hanna Tesfay]** - *Github Username*
+* **[Gosia]** - *Github Username*
 
 ## 🛠️ Tech Stack & Tools
 Based on the project requirements:
