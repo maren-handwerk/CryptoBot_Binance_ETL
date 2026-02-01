@@ -1,0 +1,44 @@
+Hello @Channel,
+
+My name is Blandine, I am data analyst at DataScientest and I will be your project mentor during these months of training. I am very happy to meet you.
+The purpose of this message is to present the different expectations relating to the project and its deadlines.
+
+How does a common thread project work as part of an ETL training with DataScientest? Just follow these few steps.
+:arrow_right: For your information, these steps are designed to ensure that your project goes as smoothly as possible, i.e. without any last-minute problems and with a final result that matches your abilities.
+
+The project that has been assigned to you is as follows: CryptoBot with Binance.
+--------------------------------------------------
+-------------------------------------------------
+Step 1 / Exploration of unstructured data: Deadline February 6
+Define the context and scope of the project
+Take charge of the different data sources
+Expected deliverable: You will have to provide a report explaining the different data sources accompanied by examples of collected data
+
+Step 2/ Data modeling: Deadline February 16
+Design a database schema respecting the third normal form (3NF) (aka Snowflake Schema) containing as much data as possible from the original dataset.
+Expected deliverable:
+Any document explaining the chosen architecture (UML diagram)
+File implementing the databases
+SQL query file
+
+Step 3 / Construction of the ETL/ELT pipeline: February 27
+Create an ELT pipeline to populate the database:
+Extraction: load data from the original sources
+Loading: denormalize (star schema) and load data into the target system (SQL Database)
+Transformation: Merge, Encoding,
+Expected deliverable:
+DataWarehouse demo
+Star schema
+
+Step 4 / Creation of the Power BI Dashboard + Defenses (30 minutes): Deadline March 9
+Popularize the progress of your project
+Create a Power BI Dashboard from the Data Warehouse
+Expected deliverable:
+Defense
+Report
+
+That's the broad outline.
+I suggest we have a first meeting on Zoom this week so that we can validate the framing step together. What do you think about :arrow_right: 30/01 at 3:30pm :arrow_left:
+React with a :+1: so that I can know that you have read this message.
+Have a nice day and see you soon,
+Blandine
