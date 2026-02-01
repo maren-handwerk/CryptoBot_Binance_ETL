@@ -1,0 +1,14 @@
+# ignore virtual environment and environment files
+.venv/
+.env
+
+# ignore Python cache
+__pycache__/
+*.pyc
+
+# ignore system files (Mac/Windows junk)
+.DS_Store
+Thumbs.db
+
+# ignore VS Code settings (optional, often good to ignore)
+.vscode/
