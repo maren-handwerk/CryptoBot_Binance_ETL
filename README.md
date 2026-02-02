@@ -14,7 +14,7 @@ We aim to analyze volatile financial markets based on Blockchain technology by c
 Based on the project requirements:
 * **Language:** Python
 * **Data Source:** Binance API
-* **Database/Warehousing:** Snowflake (or PostgreSQL/BigQuery)
+* **Database/Warehousing:** Snowflake @Hanna shares the account
 * **Orchestration/ETL:** Snaplogic / PySpark / Custom Python Scripts
 * **Visualization:** Power BI / Tableau
 * **Environment:** Virtual Environment (venv), VS Code
