@@ -16,6 +16,7 @@ Based on the project requirements:
 * **Data Source:** Binance API
 * **Database/Warehousing:** Snowflake @Hanna shares the account
 * **Orchestration/ETL:** Snaplogic / PySpark / Custom Python Scripts
+* **Documentation:** Google Doc, Documentlink: https://docs.google.com/document/d/1lsAlFPZwR8jeNSquRmOkmlM_6r2IwQOOBPwNLxFEKpA/edit?tab=t.0
 * **Visualization:** Power BI / Tableau
 * **Environment:** Virtual Environment (venv), VS Code
 
