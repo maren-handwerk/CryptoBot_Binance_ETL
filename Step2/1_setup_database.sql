@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Currency (
     Currency_ID INT AUTO_INCREMENT PRIMARY KEY,
     Currency_Name VARCHAR(50) NOT NULL UNIQUE,
     Asset_Type VARCHAR(20) NOT NULL,
-    Category VARCHAR(50) DEFAULT 'To be defined'
+    Manual_Category VARCHAR(50) DEFAULT 'To be defined'
 );
 
 CREATE TABLE IF NOT EXISTS Pair (

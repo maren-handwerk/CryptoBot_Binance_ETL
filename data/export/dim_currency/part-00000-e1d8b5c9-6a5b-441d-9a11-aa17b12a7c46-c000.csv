@@ -1,0 +1,6 @@
+Currency_ID,Currency_Name,Asset_Type
+1,BTC,crypto
+2,USDT,stablecoin
+3,ETH,crypto
+7,BNB,crypto
+9,SOL,crypto
