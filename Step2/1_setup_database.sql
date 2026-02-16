@@ -9,7 +9,7 @@ USE CryptoBot_Step2;
 DROP TABLE IF EXISTS price_hist;
 DROP TABLE IF EXISTS pair;
 DROP TABLE IF EXISTS currency;
-
+ 
 -- 2. create tables
 CREATE TABLE IF NOT EXISTS Currency (
     Currency_ID INT AUTO_INCREMENT PRIMARY KEY,

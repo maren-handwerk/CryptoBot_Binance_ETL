@@ -1,6 +1,6 @@
 -- Comprehensive Functional Test: Linking all 3NF tables
 -- This query proves the relational integrity of the database schema.
-
+ 
 SELECT 
     c_base.currency_name AS 'Base_Asset',
     c_base.asset_type AS 'Base_Type',

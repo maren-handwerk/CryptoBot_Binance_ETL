@@ -4,7 +4,7 @@ import mysql.connector
 import requests
 import pandas as pd
 from datetime import datetime
-
+ 
 
 
 # --- 1. Generic function from Step1 to fetch latest price from Binance API

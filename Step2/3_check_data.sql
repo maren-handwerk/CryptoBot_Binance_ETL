@@ -1,6 +1,6 @@
--- quick data check to validate schema
+-- quick data check to validate schema 
 USE CryptoBot_Step2;
-
+ 
 SELECT 
     c_base.currency_name AS base_currency,
     c_quote.currency_name AS quote_currency,
