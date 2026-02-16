@@ -1,4 +1,5 @@
-
+-- quick data check to validate schema
+USE CryptoBot_Step2;
 
 SELECT 
     c_base.currency_name AS base_currency,

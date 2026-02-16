@@ -1,3 +1,5 @@
+# this script automates the ETL process 
+
 import mysql.connector
 import requests
 import pandas as pd

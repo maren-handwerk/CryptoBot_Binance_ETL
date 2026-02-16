@@ -4,11 +4,10 @@
 SELECT 
     c_base.currency_name AS 'Base_Asset',
     c_base.asset_type AS 'Base_Type',
-    c_base.manual_category AS 'Base_Market_Sector',
     c_quote.currency_name AS 'Quote_Asset',
     c_quote.asset_type AS 'Quote_Type',
-    c_quote.manual_category AS 'Quote_Market_Sector',
     p.pair_name AS 'Trading_Pair',
+    p.manual_category AS 'Market_Sector',
     ph.price AS 'Market_Price',
     ph.timestamp AS 'Retrieved_At'
 FROM Price_Hist ph
