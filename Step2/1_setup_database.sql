@@ -14,7 +14,9 @@ DROP TABLE IF EXISTS currency;
 CREATE TABLE IF NOT EXISTS Currency (
     Currency_ID INT AUTO_INCREMENT PRIMARY KEY,
     Currency_Name VARCHAR(50) NOT NULL UNIQUE,
-    Asset_Type VARCHAR(20) NOT NULL
+    Asset_Type VARCHAR(20) NOT NULL,
+    CMC_Global_Price_USD DECIMAL(20, 8), #Place for reference currency USD
+    CMC_Raw_Tags TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Pair (
@@ -24,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Pair (
     Quote_Currency_ID INT NOT NULL,
     FOREIGN KEY (Base_Currency_ID) REFERENCES Currency(Currency_ID),
     FOREIGN KEY (Quote_Currency_ID) REFERENCES Currency(Currency_ID),
-    Manual_Category VARCHAR(50) DEFAULT 'To be defined'
+    Manual_Category VARCHAR(100) DEFAULT 'To be defined'
 );
 
 CREATE TABLE IF NOT EXISTS Price_Hist (
