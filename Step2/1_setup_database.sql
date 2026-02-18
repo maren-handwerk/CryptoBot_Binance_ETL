@@ -6,9 +6,9 @@ CREATE DATABASE IF NOT EXISTS CryptoBot_Step2;
 USE CryptoBot_Step2;
 
 -- optional: delete tables first if they already exist and you want to apply changes
-DROP TABLE IF EXISTS price_hist;
-DROP TABLE IF EXISTS pair;
-DROP TABLE IF EXISTS currency;
+--DROP TABLE IF EXISTS price_hist;
+--DROP TABLE IF EXISTS pair;
+--DROP TABLE IF EXISTS currency;
  
 -- 2. create tables
 CREATE TABLE IF NOT EXISTS Currency (

@@ -2,8 +2,7 @@ import mysql.connector
 import requests
 from datetime import datetime
 
-# --- 1. CONFIGURATION ---
-# [CHANGE: Added CMC API Key and updated Category Map for your 8 specific areas]
+# --- 1. CONFIGURATION CNC API Key only for reviewer---
 CMC_API_KEY = "9d2a04faa72a4d6295c495fa99ce63d1"
 DB_CONFIG = {
     'host': '127.0.0.1',
@@ -12,7 +11,7 @@ DB_CONFIG = {
     'database': 'CryptoBot_Step2'
 }
 
-# [NEW: Mapping logic for your 8 categories based on CMC Tags]
+# Mapping logic for 8 categories based on CMC Tags
 CATEGORY_MAP = {
     "DeFi (Decentralized Finance)": ["defi", "decentralized-finance"],
     "Stablecoins": ["stablecoin", "asset-backed-stablecoin", "fiat-stablecoin"],
@@ -26,7 +25,7 @@ CATEGORY_MAP = {
 
 # --- 2. DATA FETCHING FUNCTIONS ---
 
-# [KEEP: Your original Binance function remains for reliability]
+# Binance Function see Step1
 def get_binance_data(symbol):
     url = f"https://api.binance.com/api/v3/ticker/price?symbol={symbol.upper()}"
     try:
@@ -37,7 +36,7 @@ def get_binance_data(symbol):
         print(f"Error fetching Binance data for {symbol}: {e}")
         return None
 
-# [NEW: Function to fetch Metadata (Tags/Price) from CMC]
+# Function to fetch Metadata (Tags/Price) from CMC]
 def get_cmc_metadata(symbols):
     url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
     headers = {"X-CMC_PRO_API_KEY": CMC_API_KEY}
@@ -50,7 +49,7 @@ def get_cmc_metadata(symbols):
         print(f"CMC API Error: {e}")
         return {}
 
-# [NEW: Logic to filter CMC tags into your 8 defined categories]
+# Logic to filter CMC tags into your 8 defined categories]
 def map_tags_to_8_categories(raw_tags):
     if not raw_tags: return "To be defined"
     matched = []
@@ -60,7 +59,7 @@ def map_tags_to_8_categories(raw_tags):
             matched.append(pretty_name)
     return ", ".join(matched) if matched else "Other / Not Mapped"
 
-# [KEEP: Your original asset type logic as a fallback]
+# Original asset type logic as a fallback]
 def get_asset_type(currency):
     stablecoins = {"USDT", "USDC", "BUSD"}
     major_coins = {"BTC", "ETH", "BNB", "SOL"}
@@ -71,9 +70,9 @@ def get_asset_type(currency):
 # --- 3. MAIN INGESTION PROCESS ---
 
 def run_ingestion():
-    target_markets = ["BTCUSDT", "ETHUSDT", "ETHBTC", "BNBUSDT", "SOLUSDT"]
-    # [CHANGE: Extracting base assets to fetch CMC data in one batch request]
-    base_assets = ["BTC", "ETH", "BNB", "SOL"]
+    target_markets = ["BTCUSDT", "ETHUSDT", "ETHBTC", "BNBUSDT", 
+        "SOLUSDT", "ADAUSDT", "DOTUSDT", "USDCUSDT"]
+    base_assets = ["BTC", "ETH", "BNB", "SOL", "ADA", "DOT", "USDC"]
 
     print("Step 1: Fetching global metadata from CoinMarketCap...")
     cmc_info = get_cmc_metadata(base_assets)
@@ -101,11 +100,11 @@ def run_ingestion():
             raw_tags = asset_data.get('tags', [])
             global_usd_price = asset_data.get('quote', {}).get('USD', {}).get('price')
             
-            # [NEW: Apply the 8-category filter]
+            # Apply the 8-category filter]
             mapped_cat = map_tags_to_8_categories(raw_tags)
 
             # D. Insert/Update Currency Table (with new CMC columns)
-            # [CHANGE: Updated SQL to include CMC_Global_Price_USD and CMC_Raw_Tags]
+            # Updated SQL to include CMC_Global_Price_USD and CMC_Raw_Tags]
             cursor.execute("""
                 INSERT INTO Currency (Currency_Name, Asset_Type, CMC_Global_Price_USD, CMC_Raw_Tags)
                 VALUES (%s, %s, %s, %s)
@@ -124,7 +123,7 @@ def run_ingestion():
             cursor.execute("SELECT Currency_ID FROM Currency WHERE Currency_Name=%s", (quote,))
             quote_id = cursor.fetchone()[0]
 
-            # [CHANGE: Updating the Manual_Category with our filtered results]
+            # Updating the Manual_Category with our filtered results]
             cursor.execute("""
                 INSERT INTO Pair (Pair_Name, Base_Currency_ID, Quote_Currency_ID, Manual_Category)
                 VALUES (%s, %s, %s, %s)

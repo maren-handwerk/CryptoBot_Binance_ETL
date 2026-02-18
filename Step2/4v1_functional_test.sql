@@ -13,6 +13,6 @@ FROM Price_Hist ph
 JOIN Pair p ON ph.pair_id = p.pair_id
 JOIN Currency c_base ON p.base_currency_id = c_base.currency_id
 JOIN Currency c_quote ON p.quote_currency_id = c_quote.currency_id
--- WICHTIG: Hier filtern wir für deine Kategorien auf den USD-Maßstab
+-- Filter in CMC_Global_Price_USD
 WHERE c_quote.currency_name IN ('USDT', 'USD')
 ORDER BY ph.timestamp DESC;
