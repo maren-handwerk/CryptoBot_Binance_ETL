@@ -26,15 +26,31 @@ def run_kimball_bridge():
         my_conn = mysql.connector.connect(**MYSQL_CONFIG)
         sf_conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
         
-        # --- STEP 1: SYNCHRONIZE DIM_PAIR (Categories from MySQL -> Snowflake) ---
-        print("Synchronizing dimensions (DIM_PAIR)...")
-        pairs_mysql = pd.read_sql("SELECT Pair_ID as PAIR_ID, Pair_Name as PAIR_NAME, Manual_Category as CATEGORY_NAME FROM Pair", my_conn)
+        # --- STEP 1: SYNCHRONIZE DIM_PAIR (Full Master Data Sync) ---
+        print("Synchronizing dimensions (DIM_PAIR) with corrected mapping...")
         
-        # Overwrite=True ensures that if you change a category in MySQL, it updates in Snowflake
+        # Get PAIR_ID, Name, Category AND the Asset Types via JOIN
+        # This automatically corrects the "BTC = Stablecoin" error from MySQL
+        pairs_query = """
+            SELECT 
+                p.Pair_ID as PAIR_ID, 
+                p.Pair_Name as PAIR_NAME, 
+                p.Manual_Category as CATEGORY_NAME,
+                c1.Currency_Name as BASE_CURRENCY,
+                c1.Asset_Type as BASE_ASSET_TYPE,
+                c2.Currency_Name as QUOTE_CURRENCY,
+                c2.Asset_Type as QUOTE_ASSET_TYPE
+            FROM Pair p
+            JOIN Currency c1 ON p.Base_Currency_ID = c1.Currency_ID
+            JOIN Currency c2 ON p.Quote_Currency_ID = c2.Currency_ID
+        """
+        pairs_mysql = pd.read_sql(pairs_query, my_conn)
+        
+        # Overwrite=True clears Snowflake on each run (Best Practice for Dimensions)
         write_pandas(sf_conn, pairs_mysql, 'DIM_PAIR', auto_create_table=False, overwrite=True)
+        print(f"Successfully synced {len(pairs_mysql)} pairs to Snowflake.")
 
         # --- STEP 2: DELTA CHECK FOR PRICES ---
-        # We check Snowflake for the most recent data point to avoid duplicates
         print("Checking current data status in FACT_PRICE...")
         try:
             last_ts_df = pd.read_sql("SELECT MAX(TIME_ID) as LAST_TS FROM FACT_PRICE", sf_conn)
@@ -48,28 +64,21 @@ def run_kimball_bridge():
         query = "SELECT Pair_ID as PAIR_ID, Price as PRICE, Timestamp as TIME_ID FROM Price_Hist"
         df = pd.read_sql(query, my_conn)
         
-        # Date formatting and filtering
         df['TIME_ID'] = pd.to_datetime(df['TIME_ID'])
         
         if last_snowflake_ts:
-            # Only keep rows that are newer than the latest entry in Snowflake
             df = df[df['TIME_ID'] > pd.to_datetime(last_snowflake_ts)]
         
         if df.empty:
-            print("No new data found. Bridge process terminated.")
+            print("No new price data found. Bridge process terminated.")
             return
 
-        print(f"Found {len(df)} new records for upload.")
-
-        # --- STEP 4: PREPARE AND UPLOAD FACT DATA ---
-        # Define Source_ID (Default 1 for Binance)
+        # --- STEP 4: UPLOAD FACT DATA (Append Mode) ---
         df['SOURCE_ID'] = 1
         fact_df = df[['TIME_ID', 'PAIR_ID', 'SOURCE_ID', 'PRICE']]
-        
-        # Format timestamp for Snowflake compatibility
         fact_df['TIME_ID'] = fact_df['TIME_ID'].dt.strftime('%Y-%m-%d %H:%M:%S.%f')
 
-        # Upload using the high-performance write_pandas function (Append mode)
+        # IMPORTANT: Do NOT overwrite here, so the history grows!
         write_pandas(sf_conn, fact_df, 'FACT_PRICE', auto_create_table=False)
         
         print(f"SUCCESS: {len(fact_df)} new price entries uploaded to Snowflake!")
